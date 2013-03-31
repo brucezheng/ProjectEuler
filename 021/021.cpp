@@ -1,7 +1,7 @@
 /*
 	Bruce Zheng
-	3/30/2013
 	Problem 021
+	3/30/2013
 
 	Simple algorithm for finding the sum of proper divisors of n by just checking ints that divide 
 	below n^{1/2}. Amicability is easy to check after that point and a simple loop finds all 
