@@ -43,7 +43,7 @@ map<int,int> perm(int n) {
 int main()
 {
 	const int size = 10001;
-	// 0 = not prime, 1 = prime, 2 = circular prime
+	// true = prime
 	bool *p = new bool[size];
 	// initializing stack
 	p[0] = false;
