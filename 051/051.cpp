@@ -27,6 +27,7 @@ int length(int n)
 	}
 }
 
+// first = not digit replacing; second = digit replacing
 vector<pair<int,int>> spaces(int sz, int n)
 {
 	vector<pair<int,int>> result;
@@ -105,51 +106,67 @@ vector<vector<int>> spaces(int sz, const vector<int>& v)
 }
 */
 
+// x = not repeating; y = repeating
 int checkp (int x, int y, bool* p) {
 	int count = 0;
-	for (int i = 0; i < 10; ++i) {
-		if (p[x+y*i]) ++ count;
+	if (y == 0) {
+		if (p[x]) ++count;
+	}
+	else {
+		if (length(x) >= length(y)) {
+			if (p[x]) ++count;
+		}
+		for (int i = 1; i < 10; ++i) {
+			if (p[x+y*i]) ++count;
+		}
 	}
 	return count;
 }
 
 int main()
 {
-	int n = 34;
-	vector<pair<int,int>>& v = spaces(4,n);
-	for (int i = 0; i < v.size(); ++i) {
-		cout << v[i].first << ' ' << v[i].second;
-		cout << endl;
-	}
+	time_t start = clock();
+	const int size = 100001;
+	// true = prime
+	bool *p = new bool[size];
+	// initializing stack
+	p[0] = false;
+	p[1] = false;
+	for (int i = 2; i < size; ++i)
+		p[i] = true;
+	// getting prime numbers
+	for (int i = 2; i < size; ++i)
+		if (p[i])
+			for (int j = 2; j <= (size-1)/i; ++j) 
+				p[j*i] = false;
+	// do stuff
+	bool done = false;
+	int i = 1;
 	/*
-	bool* p = new bool[100000];
-	//time_t start = clock();
-	vector<int> v;
-	for (int i = 1; i < 4; ++i) {
-		v.push_back(i);
-	}
-	//for (int i = 0; i < 1000; ++i) {
-	vector<vector<int>>& a = spaces(4,v);
-	//}
-	//time_t end = clock();
-	//double dur = double(end-start)/double(CLOCKS_PER_SEC);
-	//cout << "TIME: " << dur << endl;
-	for(int i = 0; i < a.size(); ++i) {
-		int x = 0;
-		int y = 0;
-		int sz = a[i].size();
-		for (int j = sz-1; j >= 0; --j) {
-			if (a[i][j] != -1) {
-				y += pow(10,sz-1-j)*(a[i][j]);
-				//cout << a[i][j] << ' ';
-			}
-			else x += pow(10,sz-1-j)*1;
-			//cout << "- ";
-		}
-		//cout << y << ' ' << x << endl;
-		checkp (x,y,p);
-		cout << endl;
+	vector<pair<int,int>>& v = spaces(2,3);
+	for (int i = 0; i < v.size(); ++i) {
+		cout << v[i].first << ' ' << v[i].second << ' ';
+		cout << checkp(v[i].first,v[i].second,p) << endl;
 	}
 	*/
+	while (!done) {
+		for (int j = 1; j < pow(10,i); ++j) {
+			if (j != i) {
+				if (i >= 5) cout << j << endl;
+				//cout << i << ' ' << j << endl;
+				vector<pair<int,int>>& v = spaces(i,j);
+				for (int k = 0; k < v.size(); ++k) {
+					if (checkp(v[k].first,v[k].second,p) >= 8) {
+						cout << v[k].first << ' ' << v[k].second << endl;
+						done = true;
+					}
+				}
+			}
+		}
+		++i;
+	}
+	time_t end = clock();
+	double dur = double(end-start)/double(CLOCKS_PER_SEC);
+	cout << "TIME: " << dur << endl;
 	pause();
 }
