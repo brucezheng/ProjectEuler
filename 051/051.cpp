@@ -1,3 +1,15 @@
+/*
+	Bruce Zheng
+	Problem 051
+	4/15/2013
+
+	There are three main components to this program. First, spaces creates a set of numbers with
+	replacement slots in the form of a pair of numbers. The first number in the pair represents 
+	the part of the number which is not replaced by digits, whereas the second number does. Checkp
+	checks these two numbers to see how many digits result in a prime. Main produces an array to 
+	check primes and also produces all combinations of possible number replacement pairs to check.
+*/
+
 #include <vector>
 #include <iostream>
 #include <ctime>
@@ -10,6 +22,7 @@ void pause()
 	cin >> ch;
 }
 
+// number of digits in n
 int length(int n)
 {
 	if (n >= 10000) {
@@ -67,45 +80,6 @@ vector<pair<int,int>> spaces(int sz, int n)
 	return result;
 }
 
-/*
-vector<vector<int>> spaces(int sz, const vector<int>& v)
-{
-	vector<vector<int>> result;
-	if (sz == 1) {
-		if (v.size() == 1) {
-			result.push_back(v);
-		}
-		else {
-			vector<int> temp;
-			temp.push_back(-1);
-			result.push_back(temp);
-		}
-	}
-	else {
-		if (sz > v.size()) {
-			vector<vector<int>>& a = spaces(sz-1,v);
-			for(int i = 0; i < a.size(); ++i) {
-				vector<int> temp = a[i];
-				temp.push_back(-1);
-				result.push_back(temp);
-			}
-		}
-		if (v.size() > 0) {
-			vector<int> trunc;
-			for (int i = 0; i < v.size()-1; ++i)
-				trunc.push_back(v[i]);
-			vector<vector<int>>& b = spaces(sz-1,trunc);
-			for(int i = 0; i < b.size(); ++i) {
-				vector<int> temp = b[i];
-				temp.push_back(v[v.size()-1]);
-				result.push_back(temp);
-			}
-		}
-	}
-	return result;
-}
-*/
-
 // x = not repeating; y = repeating
 int checkp (int x, int y, bool* p) {
 	int count = 0;
@@ -126,7 +100,7 @@ int checkp (int x, int y, bool* p) {
 int main()
 {
 	time_t start = clock();
-	const int size = 100001;
+	const int size = 1000001;
 	// true = prime
 	bool *p = new bool[size];
 	// initializing stack
@@ -142,18 +116,9 @@ int main()
 	// do stuff
 	bool done = false;
 	int i = 1;
-	/*
-	vector<pair<int,int>>& v = spaces(2,3);
-	for (int i = 0; i < v.size(); ++i) {
-		cout << v[i].first << ' ' << v[i].second << ' ';
-		cout << checkp(v[i].first,v[i].second,p) << endl;
-	}
-	*/
-	while (!done) {
+	while (!done && i < 7) {
 		for (int j = 1; j < pow(10,i); ++j) {
-			if (j != i) {
-				if (i >= 5) cout << j << endl;
-				//cout << i << ' ' << j << endl;
+			if (length(j) != i) {
 				vector<pair<int,int>>& v = spaces(i,j);
 				for (int k = 0; k < v.size(); ++k) {
 					if (checkp(v[k].first,v[k].second,p) >= 8) {
